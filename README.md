@@ -1,6 +1,10 @@
 # qb-speedcameras
-Originally an esx script that was "converted" to QBCore even though the files weren't using qbcore calls and were instead using nvcore
-Has pre-setup cameras already and should be reasonably self explanatory for adding new cameras (go into client.lua) if anyone posts an issue about adding cameras I will add instructions here.
+Originally an esx script that was "converted" to QBCore even though the files weren't using qbcore calls and were instead using nvcore.
+
+- Heavily modified code
+- Added config
+
+Has pre-setup cameras already and should be reasonably self explanatory for adding new cameras (go into cofig.lua) if anyone posts an issue about adding cameras I will add instructions here.
 
 
 ## Requirements
@@ -8,13 +12,52 @@ QB-PHONE | https://github.com/qbcore-framework/qb-phone
 QB-BANKING | https://github.com/qbcore-framework/qb-banking
 not sure about any other requirements
 
-## Testing Results
-Tested on WEEZOOKA'S RP and passed tests with flying colours even managing to fine players who were above the speed limit and caught by cameras
 
-## If you don't want to fine the player
-There is a function near the top of client/main.lua which you can put all of the code you want to have executed when the player
-triggers a speedcamera
-you must also change the useBilling = false variable at the top of the file to useBilling = true in order to use the function.
+## Config
+```lua
+Config = {}
 
-## Want to lower/raise fines?
-Go into server/main.lua and there should be some notation outlining what to change if you want to change the fines for each type of speedcamera
+Config.MPH = true                 -- false for KMH / true for MPH
+Config.useCameraSound = true      
+Config.useFlashingScreen = true
+Config.useBlips = true
+Config.alertPolice = true     
+Config.alertSpeed = 130           -- Alerts police when caught above this speed
+Config.useBilling = true
+
+Config.Cameras = {
+  -- [Speed] = ...
+  [60] = {
+    fineAmount = 50,
+    blipColour = 5,
+    blipSprite = 184,
+    blipSize = 0.9,
+    locations = {
+      vector3(-524.2645, -1776.3569, 21.3384)
+    }
+  },
+  [80] = {
+    fineAmount = 75,
+    blipColour = 17,
+    blipSprite = 184,
+    blipSize = 0.9,
+    locations = {
+      vector3(2506.0671, 4145.2431, 38.1054)
+    }
+  },
+  [120] = {
+    fineAmount = 100,
+    blipColour = 1,
+    blipSprite = 184,
+    blipSize = 0.9,
+    locations = {
+      vector3(1584.9281, -993.4557, 59.3923),
+      vector3(2442.2006, -134.6004, 59.3923),
+      vector3(2871.7951, 3540.5795, 53.0930),
+      vector3(2636.5, 474.12, 95.53)
+    }
+  }
+
+
+}
+```
