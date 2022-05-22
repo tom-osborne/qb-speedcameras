@@ -8,8 +8,8 @@ Has pre-setup cameras already and should be reasonably self explanatory for addi
 
 
 ## Requirements
-QB-PHONE | https://github.com/qbcore-framework/qb-phone
-QB-BANKING | https://github.com/qbcore-framework/qb-banking
+QB-PHONE | https://github.com/qbcore-framework/qb-phone  
+QB-BANKING | https://github.com/qbcore-framework/qb-banking  
 not sure about any other requirements
 
 
