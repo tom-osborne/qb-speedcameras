@@ -12,12 +12,20 @@ function nonbilling()
   -- Insert code here to execute when player is caught by speedcamera and you don't want to fine them
 end
 
+AddEventHandler('onResourceStart', function(resourceName)
+  -- handles script restarts
+  if GetCurrentResourceName() == resourceName then
+      createBlips()
+  end
+end)
+
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
   QBCore.Functions.GetPlayerData(function(PlayerData)
     PlayerJob = PlayerData.job
     PlayerData = QBCore.Functions.GetPlayerData()
-  end)  
+  end)
+  createBlips()
 end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate')
@@ -31,7 +39,7 @@ function hintToDisplay(text)
   DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
-Citizen.CreateThread(function()
+function createBlips()
   for camera_speed, camera_data in pairs(Config.Cameras) do
     -- Set the blip title
     local camera_title = "Speed Camera [" .. tostring(camera_speed) .. speedUnit .. "]" 
@@ -50,11 +58,11 @@ Citizen.CreateThread(function()
       end
     end
 	end
-end)
+end
 
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(0)
+    Citizen.Wait(200)
 
     for camera_speed, camera_data in pairs(Config.Cameras) do
       for _, camera_location in pairs(camera_data.locations) do
