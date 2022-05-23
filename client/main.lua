@@ -57,7 +57,7 @@ function createBlips()
         EndTextCommandSetBlipName(blip)
       end
     end
-	end
+  end
 end
 
 Citizen.CreateThread(function()
@@ -71,7 +71,7 @@ Citizen.CreateThread(function()
         local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, camera_location.x, camera_location.y, camera_location.z)
 
         if dist <= 20.0 then
-          local playerPed = GetPlayerPed(-1)
+          local playerPed = PlayerPedId()
           local playerCar = GetVehiclePedIsIn(playerPed, false)
           local veh = GetVehiclePedIsIn(playerPed)
           local maxSpeed = camera_speed
@@ -96,7 +96,7 @@ Citizen.CreateThread(function()
                     --elseif GetDisplayNameFromVehicleModel(GetEntityModel(veh)) == "POLICET" then -- BLACKLISTED VEHICLE
                     --elseif GetDisplayNameFromVehicleModel(GetEntityModel(veh)) == "FIRETRUK" then -- BLACKLISTED VEHICLE
                     --elseif GetDisplayNameFromVehicleModel(GetEntityModel(veh)) == "AMBULAN" then -- BLACKLISTED VEHICLE
-								  else
+                  else
                     -- ALERT POLICE (START)
                     if Config.alertPolice then
                       if Speed > Config.alertSpeed then						
