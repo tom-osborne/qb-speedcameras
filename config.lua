@@ -6,7 +6,7 @@ Config.useFlashingScreen = true
 Config.useBlips = true
 Config.alertPolice = true     
 Config.alertSpeed = 130           -- Alerts police when caught above this speed
-Config.useBilling = true
+Config.useBilling = false
 
 Config.Cameras = {
   -- [Speed] = ...
