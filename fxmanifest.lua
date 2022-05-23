@@ -1,8 +1,8 @@
-resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
+fx_version 'cerulean'
+game 'gta5'
 
-description 'QBCore Speedcamera script | Properly converted by WEEZOOKA'
-
-version '0.0.1'
+description 'QBCore Speedcamera script | Originally converted by WEEZOOKA - Re-written & Optimised by Stan'
+version '1.0.0'
 
 shared_scripts {
   'config.lua'
@@ -10,20 +10,12 @@ shared_scripts {
 server_scripts {
   'server/main.lua'
 }
-
 client_scripts {
   'client/main.lua'
 }
-
 ui_page('html/index.html')
-
 files {
     'html/index.html'
 }
 
-
-
-
-
-
-
+lua54 'yes'
