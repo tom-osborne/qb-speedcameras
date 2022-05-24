@@ -63,25 +63,24 @@ end
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(200)
+    local playerPed = PlayerPedId()
+    local playerCar = GetVehiclePedIsIn(playerPed, false)
+    local veh = GetVehiclePedIsIn(playerPed)
+    local maxSpeed = camera_speed
+    local speedCoeff = 3.6
+    local Speed = GetEntitySpeed(playerPed)*speedCoeff
+    local plyCoords = GetEntityCoords(playerPed), false)
+
+    if Config.MPH then
+      speedCoeff = 2.236936
+    end
 
     for camera_speed, camera_data in pairs(Config.Cameras) do
       for _, camera_location in pairs(camera_data.locations) do
-
-        local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
+        
         local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, camera_location.x, camera_location.y, camera_location.z)
 
         if dist <= 20.0 then
-          local playerPed = PlayerPedId()
-          local playerCar = GetVehiclePedIsIn(playerPed, false)
-          local veh = GetVehiclePedIsIn(playerPed)
-          local maxSpeed = camera_speed
-          local speedCoeff = 3.6
-        
-          if Config.MPH then
-            speedCoeff = 2.236936
-          end
-
-          local Speed = GetEntitySpeed(playerPed)*speedCoeff
           if Speed > maxSpeed then
             if IsPedInAnyVehicle(playerPed, false) then
               if (GetPedInVehicleSeat(playerCar, -1) == playerPed) then
