@@ -1,17 +1,12 @@
 # qb-speedcameras
-Originally an esx script that was "converted" to QBCore even though the files weren't using qbcore calls and were instead using nvcore.
+Originally converted fromm an esx script by WEEZOOKA - Re-written & Optimised by Stan
 
-- Heavily modified code
-- Added config
-
-Has pre-setup cameras already and should be reasonably self explanatory for adding new cameras (go into cofig.lua) if anyone posts an issue about adding cameras I will add instructions here.
-
+- Has a few pre-setup cameras. Additional camera locations can be added easily in to the config.lua. 
+- Will not fine police or EMS. Additional jobs can be added into the client.lua. I may move this to the config soon.
 
 ## Requirements
 QB-PHONE | https://github.com/qbcore-framework/qb-phone  
 QB-BANKING | https://github.com/qbcore-framework/qb-banking  
-not sure about any other requirements
-
 
 ## Config
 ```lua
