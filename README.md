@@ -1,8 +1,7 @@
 # qb-speedcameras
 Originally converted from an esx script by WEEZOOKA - Re-written & Optimised
 
-## Original script
-[esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera)
+**Original script** >> [esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera)
 
 - Has a few pre-setup cameras. Additional camera locations can be added easily in to the config.lua. 
 - Will not fine police or EMS. Additional jobs can be added into the client.lua. I may move this to the config soon.
