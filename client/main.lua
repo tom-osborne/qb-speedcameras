@@ -119,9 +119,9 @@ Citizen.CreateThread(function()
                     QBCore.Functions.Notify("You were fined $" .. camera_data.fineAmount .. " for speeding! Speed limit: " .. tostring(maxSpeed) .. speedUnit, "error")
 									
                     if Config.useBilling then
-                      nonbilling()
-                    else
                       TriggerServerEvent('qb-speedcamera:PayBill', camera_data.fineAmount)
+                    else
+                      nonbilling()
                     end
 										
                     hasBeenCaught = true

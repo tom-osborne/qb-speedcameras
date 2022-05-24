@@ -1,12 +1,12 @@
 Config = {}
 
 Config.MPH = true                 -- false for KMH / true for MPH
-Config.useCameraSound = true      
-Config.useFlashingScreen = true
-Config.useBlips = true
-Config.alertPolice = true     
+Config.useCameraSound = true      -- Makes a camera shutter sound effect
+Config.useFlashingScreen = true   -- Flashes screen white for a brief moment
+Config.useBlips = true            -- Turns blips on/off
+Config.alertPolice = true         -- Whether to alert police above certain speed
 Config.alertSpeed = 130           -- Alerts police when caught above this speed
-Config.useBilling = false
+Config.useBilling = true          -- Bills player by fineAmount automatically if true
 
 Config.Cameras = {
   -- [Speed] = ...
@@ -40,6 +40,4 @@ Config.Cameras = {
       vector3(2636.5, 474.12, 95.53)
     }
   }
-
-
 }
