@@ -69,7 +69,7 @@ Citizen.CreateThread(function()
     local maxSpeed = camera_speed
     local speedCoeff = 3.6
     local Speed = GetEntitySpeed(playerPed)*speedCoeff
-    local plyCoords = GetEntityCoords(playerPed), false)
+    local plyCoords = GetEntityCoords(playerPed, false)
 
     if Config.MPH then
       speedCoeff = 2.236936
