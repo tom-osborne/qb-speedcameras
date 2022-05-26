@@ -3,17 +3,15 @@ QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = {}
 local hasBeenCaught = false
 
+local speedCoeff = 3.6
 local speedUnit = " KPH"
-if Config.MPH then
-  speedUnit = " MPH"
-end
 
-function nonbilling()
-  -- Insert code here to execute when player is caught by speedcamera and you don't want to fine them
+if Config.MPH then
+  speedCoeff = 2.236936
+  speedUnit = " MPH" 
 end
 
 AddEventHandler('onResourceStart', function(resourceName)
-  -- handles script restarts
   if GetCurrentResourceName() == resourceName then
       createBlips()
   end
@@ -33,13 +31,11 @@ AddEventHandler('QBCore:Client:OnJobUpdate', function(JobInfo)
   PlayerData.job = JobInfo
 end)
 
-function hintToDisplay(text)
-  SetTextComponentFormat("STRING")
-  AddTextComponentString(text)
-  DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+local function nonbilling()
+  -- Insert code here to execute when player is caught by speedcamera and you don't want to fine them
 end
 
-function createBlips()
+local function createBlips()
   for camera_speed, camera_data in pairs(Config.Cameras) do
     -- Set the blip title
     local camera_title = "Speed Camera [" .. tostring(camera_speed) .. speedUnit .. "]" 
@@ -67,18 +63,13 @@ Citizen.CreateThread(function()
     local playerCar = GetVehiclePedIsIn(playerPed, false)
     local veh = GetVehiclePedIsIn(playerPed)
     local maxSpeed = camera_speed
-    local speedCoeff = 3.6
     local Speed = GetEntitySpeed(playerPed)*speedCoeff
     local plyCoords = GetEntityCoords(playerPed, false)
-
-    if Config.MPH then
-      speedCoeff = 2.236936
-    end
 
     for camera_speed, camera_data in pairs(Config.Cameras) do
       for _, camera_location in pairs(camera_data.locations) do
         
-        local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, camera_location.x, camera_location.y, camera_location.z)
+        local dist = #(plyCoords - camera_location)
 
         if dist <= 20.0 then
           if Speed > maxSpeed then
