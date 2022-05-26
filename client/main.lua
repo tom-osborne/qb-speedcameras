@@ -57,14 +57,15 @@ local function createBlips()
 end
 
 Citizen.CreateThread(function()
+  local playerPed = PlayerPedId()
+  local playerCar = GetVehiclePedIsIn(playerPed, false)
+  local veh = GetVehiclePedIsIn(playerPed)
+  local maxSpeed = camera_speed
+  local Speed = GetEntitySpeed(playerPed)*speedCoeff
+  local plyCoords = GetEntityCoords(playerPed, false)
+  
   while true do
     Citizen.Wait(200)
-    local playerPed = PlayerPedId()
-    local playerCar = GetVehiclePedIsIn(playerPed, false)
-    local veh = GetVehiclePedIsIn(playerPed)
-    local maxSpeed = camera_speed
-    local Speed = GetEntitySpeed(playerPed)*speedCoeff
-    local plyCoords = GetEntityCoords(playerPed, false)
 
     for camera_speed, camera_data in pairs(Config.Cameras) do
       for _, camera_location in pairs(camera_data.locations) do
