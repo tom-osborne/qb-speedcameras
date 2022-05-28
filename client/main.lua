@@ -11,6 +11,33 @@ if Config.MPH then
   speedUnit = " MPH" 
 end
 
+local function nonbilling()
+  -- Insert code here to execute when player is caught by speedcamera and you don't want to fine them
+  print("CAUGHT!!!!")
+end
+
+local function createBlips()
+  for camera_speed, camera_data in pairs(Config.Cameras) do
+    -- Set the blip title
+    local camera_title = "Speed Camera [" .. tostring(camera_speed) .. speedUnit .. "]" 
+    -- Create blips
+    for _, camera_location in pairs(camera_data.locations) do      
+      if Config.useBlips == true then
+        -- print("Creating Blips for " .. camera_speed .. "mph camera")
+        blip = AddBlipForCoord(camera_location.x, camera_location.y, camera_location.z)
+        SetBlipSprite(blip, camera_data.blipSprite)
+        SetBlipDisplay(blip, 4)
+        SetBlipScale(blip, camera_data.blipSize)
+        SetBlipColour(blip, camera_data.blipColour)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString(camera_title)
+        EndTextCommandSetBlipName(blip)
+      end
+    end
+  end
+end
+
 AddEventHandler('onResourceStart', function(resourceName)
   if GetCurrentResourceName() == resourceName then
       createBlips()
@@ -31,48 +58,29 @@ AddEventHandler('QBCore:Client:OnJobUpdate', function(JobInfo)
   PlayerData.job = JobInfo
 end)
 
-local function nonbilling()
-  -- Insert code here to execute when player is caught by speedcamera and you don't want to fine them
-end
-
-local function createBlips()
-  for camera_speed, camera_data in pairs(Config.Cameras) do
-    -- Set the blip title
-    local camera_title = "Speed Camera [" .. tostring(camera_speed) .. speedUnit .. "]" 
-    -- Create blips
-    for _, camera_location in pairs(camera_data.locations) do      
-      if Config.useBlips == true then
-        blip = AddBlipForCoord(camera_location.x, camera_location.y, camera_location.z)
-        SetBlipSprite(blip, camera_data.blipSprite)
-        SetBlipDisplay(blip, 4)
-        SetBlipScale(blip, camera_data.blipSize)
-        SetBlipColour(blip, camera_data.blipColour)
-        SetBlipAsShortRange(blip, true)
-        BeginTextCommandSetBlipName("STRING")
-        AddTextComponentString(camera_title)
-        EndTextCommandSetBlipName(blip)
-      end
-    end
-  end
-end
 
 Citizen.CreateThread(function()
-  local playerPed = PlayerPedId()
-  local playerCar = GetVehiclePedIsIn(playerPed, false)
-  local veh = GetVehiclePedIsIn(playerPed)
-  local maxSpeed = camera_speed
-  local Speed = GetEntitySpeed(playerPed)*speedCoeff
-  local plyCoords = GetEntityCoords(playerPed, false)
-  
+ 
+  local wait_time = 100
+
   while true do
-    Citizen.Wait(200)
+    Citizen.Wait(wait_time)
+
+    local playerPed = PlayerPedId()
+    local playerCar = GetVehiclePedIsIn(playerPed, false)
+    local veh = GetVehiclePedIsIn(playerPed)
 
     for camera_speed, camera_data in pairs(Config.Cameras) do
       for _, camera_location in pairs(camera_data.locations) do
         
-        local dist = #(plyCoords - camera_location)
+        local plyCoords = GetEntityCoords(playerPed, false)
+        local dist = #(plyCoords - camera_location)        
+        local Speed = GetEntitySpeed(playerPed)*speedCoeff
+        local maxSpeed = camera_speed
 
         if dist <= 20.0 then
+          wait_time = 10
+
           if Speed > maxSpeed then
             if IsPedInAnyVehicle(playerPed, false) then
               if (GetPedInVehicleSeat(playerCar, -1) == playerPed) then
@@ -107,10 +115,9 @@ Citizen.CreateThread(function()
                       Citizen.Wait(200)
                       TriggerServerEvent('qb-speedcamera:closeGUI')
                     end
-								
-                    QBCore.Functions.Notify("You were fined $" .. camera_data.fineAmount .. " for speeding! Speed limit: " .. tostring(maxSpeed) .. speedUnit, "error")
-									
+																	
                     if Config.useBilling then
+                      QBCore.Functions.Notify("You were fined $" .. camera_data.fineAmount .. " for speeding! Speed limit: " .. tostring(maxSpeed) .. speedUnit, "error")
                       TriggerServerEvent('qb-speedcamera:PayBill', camera_data.fineAmount)
                     else
                       nonbilling()
@@ -125,6 +132,8 @@ Citizen.CreateThread(function()
             hasBeenCaught = false
             Citizen.Wait(5000) 
           end
+        else
+          wait_time = 100
         end
       end
     end
