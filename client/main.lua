@@ -60,11 +60,9 @@ end)
 
 
 Citizen.CreateThread(function()
- 
-  local wait_time = 100
 
   while true do
-    Citizen.Wait(wait_time)
+    Citizen.Wait(100)
 
     local playerPed = PlayerPedId()
     local playerCar = GetVehiclePedIsIn(playerPed, false)
@@ -125,8 +123,6 @@ Citizen.CreateThread(function()
             hasBeenCaught = false
             Citizen.Wait(5000) 
           end
-        else
-          wait_time = 100
         end
       end
     end
