@@ -40,6 +40,7 @@ end
 
 AddEventHandler('onResourceStart', function(resourceName)
   if GetCurrentResourceName() == resourceName then
+      PlayerData = QBCore.Functions.GetPlayerData()
       createBlips()
   end
 end)
@@ -47,7 +48,6 @@ end)
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
   QBCore.Functions.GetPlayerData(function(PlayerData)
-    PlayerJob = PlayerData.job
     PlayerData = QBCore.Functions.GetPlayerData()
   end)
   createBlips()
