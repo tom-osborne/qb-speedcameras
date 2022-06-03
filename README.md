@@ -21,6 +21,13 @@ Config.useBlips = true            -- Turns blips on/off
 Config.alertPolice = true         -- Whether to alert police above certain speed
 Config.alertSpeed = 130           -- Alerts police when caught above this speed
 Config.useBilling = true          -- Bills player by fineAmount automatically if true - Only change if you know what you're doing
+Config.showNotification = false   -- Shows a notification when caught
+Config.sendEmail = true           -- Sends an email when caught, false shows a notification
+
+Config.ignoredJobs = {            -- Table of jobs that wll not get fined by the cameras when on duty
+  'police',
+  'ambulance'
+}
 
 Config.Cameras = {
   -- [Speed] = ...
