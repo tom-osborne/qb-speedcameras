@@ -119,14 +119,13 @@ Citizen.CreateThread(function()
                       local msg = Lang:t('info.mail_msg', {
                         fineAmount = camera_data.fineAmount,
                         maxSpeed = tostring(maxSpeed),
-                        speedUnit = speedUnit 
+                        speedUnit = speedUnit
                       })
                       
                       if Config.showNotification then
                         QBCore.Functions.Notify(msg, "error")
                       end
                       
-                      local mail_msg = Lang:t('info.mail_msg') .. "<br />" .. msg
                       if Config.sendEmail then
                         TriggerServerEvent('qb-phone:server:sendNewMail', {
                           sender = Lang:t('info.mail_sender'),
