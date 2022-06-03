@@ -24,7 +24,7 @@ local function createBlips()
     for _, camera_location in pairs(camera_data.locations) do      
       if Config.useBlips == true then
         -- print("Creating Blips for " .. camera_speed .. "mph camera")
-        blip = AddBlipForCoord(camera_location.x, camera_location.y, camera_location.z)
+        local blip = AddBlipForCoord(camera_location.x, camera_location.y, camera_location.z)
         SetBlipSprite(blip, camera_data.blipSprite)
         SetBlipDisplay(blip, 4)
         SetBlipScale(blip, camera_data.blipSize)
@@ -36,6 +36,18 @@ local function createBlips()
       end
     end
   end
+end
+
+local function checkJob()
+  local player_job = QBCore.Functions.GetPlayerData().job
+  if player_job ~= nil then
+    for _, v in pairs(Config.ignoredJobs) do
+      if player_job.name == v and player_job.onduty then
+        return true
+      end
+    end
+  end
+  return false
 end
 
 AddEventHandler('onResourceStart', function(resourceName)
@@ -60,7 +72,7 @@ end)
 Citizen.CreateThread(function()
 
   while true do
-    Citizen.Wait(100)
+    Wait(100)
 
     local playerPed = PlayerPedId()
     local playerCar = GetVehiclePedIsIn(playerPed, false)
@@ -75,14 +87,12 @@ Citizen.CreateThread(function()
         local maxSpeed = camera_speed
 
         if dist <= 20.0 then
-          wait_time = 10
-
           if Speed > maxSpeed then
             if IsPedInAnyVehicle(playerPed, false) then
               if (GetPedInVehicleSeat(playerCar, -1) == playerPed) then
                 if hasBeenCaught == false then
                   -- Made Job only
-                  if PlayerData.job ~= nil and (PlayerData.job.name == 'police' or PlayerData.job.name == 'ambulance') then
+                  if checkJob() then
                     -- Do nothing!
                   else
                     -- ALERT POLICE (START)
@@ -106,12 +116,31 @@ Citizen.CreateThread(function()
                     end
 																	
                     if Config.useBilling then
-                      QBCore.Functions.Notify("You were fined $" .. camera_data.fineAmount .. " for speeding! Speed limit: " .. tostring(maxSpeed) .. speedUnit, "error")
+                      local msg = Lang:t('info.mail_msg', {
+                        fineAmount = camera_data.fineAmount,
+                        maxSpeed = tostring(maxSpeed),
+                        speedUnit = speedUnit 
+                      })
+                      
+                      if Config.showNotification then
+                        QBCore.Functions.Notify(msg, "error")
+                      end
+                      
+                      local mail_msg = Lang:t('info.mail_msg') .. "<br />" .. msg
+                      if Config.sendEmail then
+                        TriggerServerEvent('qb-phone:server:sendNewMail', {
+                          sender = Lang:t('info.mail_sender'),
+                          subject = Lang:t('info.mail_subject'),
+                          message = msg,
+                          button = {}
+                        })
+                      end
+                      
                       TriggerServerEvent('qb-speedcamera:PayBill', camera_data.fineAmount)
+
                     else
                       nonbilling()
                     end
-										
                     hasBeenCaught = true
                     Citizen.Wait(5000)
                   end

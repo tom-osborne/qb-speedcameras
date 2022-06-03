@@ -5,7 +5,9 @@ description 'QBCore Speedcamera script | Originally converted by WEEZOOKA - Re-w
 version '1.0.0'
 
 shared_scripts {
-  'config.lua'
+  'config.lua',
+  '@qb-core/shared/locale.lua',
+  'locales/*.lua',
 }
 server_scripts {
   'server/main.lua'

@@ -1,0 +1,10 @@
+{
+    "Lua.diagnostics.globals": [
+        "exports",
+        "AddBlipForCoord",
+        "SetBlipSprite"
+    ],
+    "Lua.diagnostics.disable": [
+        "undefined-global"
+    ]
+}
