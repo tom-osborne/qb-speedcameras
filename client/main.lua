@@ -47,9 +47,7 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
-  QBCore.Functions.GetPlayerData(function(PlayerData)
-    PlayerData = QBCore.Functions.GetPlayerData()
-  end)
+  PlayerData = QBCore.Functions.GetPlayerData()
   createBlips()
 end)
 
