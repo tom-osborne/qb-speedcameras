@@ -1,6 +1,8 @@
 # qb-speedcameras
 Originally converted from an esx script by WEEZOOKA - Re-written & Optimised
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z7D37OG)
+
 **Original script** >> [esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera)
 
 - Has a few pre-setup cameras. Additional camera locations can be added easily in to the config.lua. 
