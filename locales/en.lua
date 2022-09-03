@@ -1,6 +1,7 @@
 local Translations = {
-    error = {},
-    success = {},
+    alert = {
+        caught_speeding = "A vehicle with plate: %{vehicle_plate} was caught doing %{veh_speed} in a %{max_speed} %{speedUnit} zone!"
+    },
     info = {
         mail_sender = "LSPD Office",
         mail_subject = "Speeding Fine Notice",
