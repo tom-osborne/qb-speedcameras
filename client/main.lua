@@ -7,19 +7,19 @@ local speedCoeff = 3.6
 local speedUnit = " KPH"
 
 if Config.MPH then
-  speedCoeff = 2.236936
-  speedUnit = " MPH"
+    speedCoeff = 2.236936
+    speedUnit = " MPH"
 end
 
 local function nonbilling()
-  -- Insert code here to execute when player is caught by speedcamera and you don't want to fine them
+    -- Insert code here to execute when player is caught by speedcamera and you don't want to fine them
 end
 
 local function createBlips()
     if not Config.useBlips then return end
     for camera_speed, camera_data in pairs(Config.Cameras) do
-        local camera_title = "Speed Camera [" .. tostring(camera_speed) .. speedUnit .. "]" 
-        for _, camera_location in pairs(camera_data.locations) do      
+        local camera_title = "Speed Camera [" .. tostring(camera_speed) .. speedUnit .. "]"
+        for _, camera_location in pairs(camera_data.locations) do
             local blip = AddBlipForCoord(camera_location.x, camera_location.y, camera_location.z)
             SetBlipSprite(blip, camera_data.blipSprite)
             SetBlipDisplay(blip, 4)
@@ -34,7 +34,7 @@ local function createBlips()
 end
 
 local function checkJob()
-  local playerJob = QBCore.Functions.GetPlayerData().job
+  local playerJob = PlayerData.job
   if playerJob then
     for _, job in pairs(Config.ignoredJobs) do
       if playerJob.name == job and playerJob.onduty then
