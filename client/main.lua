@@ -45,7 +45,7 @@ local function checkJob()
   return false
 end
 
-function OnPoliceAlert(message)
+local function OnPoliceAlert(message)
     TriggerServerEvent("police:server:policeAlert", message)
 end
 
