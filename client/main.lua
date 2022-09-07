@@ -76,7 +76,7 @@ end)
 
 CreateThread(function()
     while true do
-        Wait(100)
+        Wait(0)
         local playerPed = PlayerPedId()
         local playerCar = GetVehiclePedIsIn(playerPed, false)
 
@@ -137,10 +137,10 @@ CreateThread(function()
                         hasBeenCaught = true
                         Wait(5000)
                     end
+                    hasBeenCaught = false
+                    Wait(5000)
                 end
             end
-            hasBeenCaught = false
-            Wait(5000)
         end
     end
 end)
