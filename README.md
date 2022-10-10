@@ -9,7 +9,7 @@ Originally converted from an esx script by WEEZOOKA - Re-written & Optimised
 - Will not fine police or EMS. Additional jobs can be added into the client.lua. I may move this to the config soon.
 
 ## Requirements
-[QB-PHONE](https://github.com/qbcore-framework/qb-phone)
+[QB-PHONE](https://github.com/qbcore-framework/qb-phone)  
 [QB-BANKING](https://github.com/qbcore-framework/qb-banking)
 
 ## Config
