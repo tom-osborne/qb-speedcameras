@@ -1,16 +1,13 @@
 # qb-speedcameras
 Originally converted from an esx script by WEEZOOKA - Re-written & Optimised
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z7D37OG)
-
 **Original script** >> [esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera)
 
 - Has a few pre-setup cameras. Additional camera locations can be added easily in to the config.lua. 
-- Will not fine police or EMS. Additional jobs can be added into the client.lua. I may move this to the config soon.
+- Will not fine police or EMS. Additional jobs can be added into the client.lua.
 
 ## Requirements
-[QB-PHONE](https://github.com/qbcore-framework/qb-phone)  
-[QB-BANKING](https://github.com/qbcore-framework/qb-banking)
+[qb-phone](https://github.com/qbcore-framework/qb-phone)  
+[qb-banking](https://github.com/qbcore-framework/qb-banking)
 
 ## Config
 ```lua
