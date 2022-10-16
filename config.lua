@@ -1,22 +1,23 @@
 Config = {}
 
-Config.MPH = true                 -- false for KMH / true for MPH
-Config.useCameraSound = true      -- Makes a camera shutter sound effect
-Config.useFlashingScreen = true   -- Flashes screen white for a brief moment
-Config.useBlips = true            -- Turns blips on/off
-Config.alertPolice = true         -- Whether to alert police above certain speed
-Config.alertSpeed = 130           -- Alerts police when caught above this speed
-Config.useBilling = true          -- Bills player by fineAmount automatically if true - Only change if you know what you're doing
-Config.showNotification = false   -- Shows a notification when caught
-Config.sendEmail = true           -- Sends an email when caught, false shows a notification
+Config.MPH = true                 -- bool: false for KMH / true for MPH
+Config.useCameraSound = true      -- bool: Makes a camera shutter sound effect
+Config.useFlashingScreen = true   -- bool: Flashes screen white for a brief moment
+Config.useBlips = true            -- bool: Turns blips on/off
+Config.alertPolice = true         -- bool: Whether to alert police above certain speed
+Config.alertSpeed = 130           -- number: Alerts police when caught above this speed
+Config.useBilling = true          -- bool: Bills player by fineAmount automatically if true - Only change if you know what you're doing
+Config.OnlyBillIfOwned = false     -- bool: Only bill the player if they own the vehicle they are driving
+Config.showNotification = false   -- bool: Shows a notification when caught
+Config.sendEmail = true           -- bool: Sends an email when caught, false shows a notification
 
-Config.ignoredJobs = {            -- Table of jobs that wll not get fined by the cameras when on duty
+Config.ignoredJobs = {            -- table: Table of jobs that wll not get fined by the cameras when on duty
     'police',
     'ambulance'
 }
 
 Config.Cameras = {
-    -- [Speed] = ...
+    -- [Speed] = {}
     [60] = {
         fineAmount = 50,
         blipColour = 5,

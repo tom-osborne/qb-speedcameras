@@ -45,6 +45,28 @@ local function checkJob()
   return false
 end
 
+local function billPlayer(camera_data, maxSpeed, units)
+    local msg = Lang:t('info.mail_msg', {
+        fineAmount = tostring(camera_data.fineAmount),
+        maxSpeed = tostring(maxSpeed),
+        speedUnit = units
+    })
+
+    if Config.showNotification then
+        QBCore.Functions.Notify(msg, "error")
+    end
+
+    if Config.sendEmail then
+        TriggerServerEvent('qb-phone:server:sendNewMail', {
+        sender = Lang:t('info.mail_sender'),
+        subject = Lang:t('info.mail_subject'),
+        message = msg,
+        button = {}
+        })
+    end
+    TriggerServerEvent('qb-speedcamera:PayBill', camera_data.fineAmount)
+end
+
 local function OnPoliceAlert(message)
     TriggerServerEvent("police:server:policeAlert", message)
 end
@@ -112,25 +134,16 @@ CreateThread(function()
                         end
 
                         if Config.useBilling then
-                            local msg = Lang:t('info.mail_msg', {
-                                fineAmount = tostring(camera_data.fineAmount),
-                                maxSpeed = tostring(maxSpeed),
-                                speedUnit = speedUnit
-                            })
-
-                            if Config.showNotification then
-                                QBCore.Functions.Notify(msg, "error")
+                            if Config.OnlyBillIfOwned then
+                                local plate = QBCore.Functions.GetPlate(playerCar)
+                                QBCore.Functions.TriggerCallback("qb-speedcameras:server:checkOwnership", function(result)
+                                    if result then
+                                        billPlayer(camera_data, maxSpeed, speedUnit)
+                                    end
+                                end, plate)
+                            else
+                                billPlayer(camera_data, maxSpeed, speedUnit)
                             end
-
-                            if Config.sendEmail then
-                                TriggerServerEvent('qb-phone:server:sendNewMail', {
-                                sender = Lang:t('info.mail_sender'),
-                                subject = Lang:t('info.mail_subject'),
-                                message = msg,
-                                button = {}
-                                })
-                            end
-                            TriggerServerEvent('qb-speedcamera:PayBill', camera_data.fineAmount)
                         else
                             nonbilling()
                         end
