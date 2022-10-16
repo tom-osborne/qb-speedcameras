@@ -7,7 +7,7 @@ Config.useBlips = true            -- bool: Turns blips on/off
 Config.alertPolice = true         -- bool: Whether to alert police above certain speed
 Config.alertSpeed = 130           -- number: Alerts police when caught above this speed
 Config.useBilling = true          -- bool: Bills player by fineAmount automatically if true - Only change if you know what you're doing
-Config.OnlyBillIfOwned = false     -- bool: Only bill the player if they own the vehicle they are driving
+Config.OnlyBillIfOwned = false    -- bool: Only bill the player if they own the vehicle they are driving
 Config.showNotification = false   -- bool: Shows a notification when caught
 Config.sendEmail = true           -- bool: Sends an email when caught, false shows a notification
 
