@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'gta5'
 
 description 'QBCore Speedcamera script | Originally converted by WEEZOOKA - Re-written & Optimised by Stan'
-version '1.0.0'
+version '1.2.1'
 
 shared_scripts {
   'config.lua',
