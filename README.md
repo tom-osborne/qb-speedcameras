@@ -54,11 +54,12 @@ Triggered upon player being caught
 
 ## Server Events
 ```lua
-RegisterNetEvent("qb-speedcameras:server:caught", function(netID, camera_location)
+RegisterNetEvent("qb-speedcameras:server:caught", function(source, netID, camera_location)
     -- Event handler code
 end)
 ```
-Triggered upon player being caught  
+Triggered upon player being caught
+- `source` **number** The source of the event trigger (player ID)
 - `netID` **number** The network ID of the vehicle the player was in at the time of being caught.
 - `camera_location` **vec3** The camera location that caught the player.
 
