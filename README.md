@@ -64,4 +64,4 @@ Triggered upon player being caught
 - `camera_location` [**vec3**] The camera location that caught the player.
 
 ## Credits
-[esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera)
+[esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera) - Original resource
