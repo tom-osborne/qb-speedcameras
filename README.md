@@ -41,25 +41,25 @@ Config.Cameras = {}               -- table: List of cameras
 # Developers
 
 ## Client Events
-> ```lua
-> RegisterNetEvent("qb-speedcameras:client:caught", function(playerCar, camera_location)
->     -- Event handler code
-> end)
-> ```
-> Triggered upon player being caught  
-> - `playerCar` **number** The vehicle the player was in at the time of being caught.
-> - `camera_location` **vec3** The camera location that caught the player.
+```lua
+RegisterNetEvent("qb-speedcameras:client:caught", function(playerCar, camera_location)
+    -- Event handler code
+end)
+```
+Triggered upon player being caught  
+- `playerCar` **number** The vehicle the player was in at the time of being caught.
+- `camera_location` **vec3** The camera location that caught the player.
 
 
 ## Server Events
-> ```lua
-> RegisterNetEvent("qb-speedcameras:server:caught", function(netID, camera_location)
->     -- Event handler code
-> end)
-> ```
-> Triggered upon player being caught  
-> - `netID` **number** The network ID of the vehicle the player was in at the time of being caught.
-> - `camera_location` **vec3** The camera location that caught the player.
+```lua
+RegisterNetEvent("qb-speedcameras:server:caught", function(netID, camera_location)
+    -- Event handler code
+end)
+```
+Triggered upon player being caught  
+- `netID` **number** The network ID of the vehicle the player was in at the time of being caught.
+- `camera_location` **vec3** The camera location that caught the player.
 
 ## Credits
 [esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera)
