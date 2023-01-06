@@ -48,8 +48,8 @@ RegisterNetEvent("qb-speedcameras:client:caught", function(playerCar, camera_loc
 end)
 ```
 Triggered upon player being caught  
-- `playerCar` **number** The vehicle the player was in at the time of being caught.
-- `camera_location` **vec3** The camera location that caught the player.
+- `playerCar` [**number**] The vehicle the player was in at the time of being caught.
+- `camera_location` [**vec3**] The camera location that caught the player.
 
 
 ## Server Events
