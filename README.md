@@ -39,6 +39,7 @@ Config.Cameras = {}               -- table: List of cameras
 ```
 
 # Developers
+Developers can use the following events to handle any extended functionality. These can be added to any resource.
 
 ## Client Events
 ```lua
