@@ -41,8 +41,6 @@ Config.Cameras = {}               -- table: List of cameras
 # Developers
 
 ## Client Events
-> ## `qb-speedcameras:client:caught`
-> Usage:
 > ```lua
 > RegisterNetEvent("qb-speedcameras:client:caught", function(playerCar, camera_location)
 >     -- Event handler code
@@ -54,8 +52,6 @@ Config.Cameras = {}               -- table: List of cameras
 
 
 ## Server Events
-> ## `qb-speedcameras:server:caught`
-> Usage:
 > ```lua
 > RegisterNetEvent("qb-speedcameras:server:caught", function(netID, camera_location)
 >     -- Event handler code
