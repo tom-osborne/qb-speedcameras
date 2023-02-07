@@ -1,13 +1,23 @@
 # qb-speedcameras
-Originally converted from an esx script by WEEZOOKA - Re-written & Optimised  
-**Original script** >> [esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera)
+A simple resource to add speed cameras around the city.
+- Some pre-configured camera locations provided.
+- Additional camera locations can be easily added using the template shown in the config.lua. 
+- Jobs can be exempt from being caught. By default this is set to 'police' and 'ambulance' jobs.
+- Can bill any player or be set to only bill if the player owns the car they are driving.
 
-- Has a few pre-setup cameras. Additional camera locations can be added easily in to the config.lua. 
-- Will not fine police or EMS. Additional jobs can be added into the client.lua.
-
-## Requirements
+## Dependencies
+[qb-core](https://github.com/qbcore-framework/qb-core)  
 [qb-phone](https://github.com/qbcore-framework/qb-phone)  
-[qb-banking](https://github.com/qbcore-framework/qb-banking)
+[qb-banking](https://github.com/qbcore-framework/qb-banking)  
+
+## Installation
+- Download from latest releases
+- Extract files
+- Rename folder to `qb-speedcameras`
+- Make any changes you wish to the `config.lua`
+- Drag folder into your `resources/[qb]` folder
+- Ensure folder (`resources/[qb]` folder is ensured by default)
+- Restart server
 
 ## Config
 ```lua
@@ -24,6 +34,9 @@ Config.OnlyBillIfOwned = false    -- bool: Only bill the player if they own the 
 Config.showNotification = false   -- bool: Shows a notification when caught
 Config.sendEmail = true           -- bool: Sends an email when caught, false shows a notification
 
-Config.ignoredJobs = {            -- table: Table of jobs that wll not get fined by the cameras when on duty
+Config.ignoredJobs = {}            -- table: Table of jobs that wll not get fined by the cameras when on duty
 Config.Cameras = {}               -- table: List of cameras
 ```
+
+## Credits
+[esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera) - Original resource
