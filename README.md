@@ -39,5 +39,5 @@ Config.Cameras = {}               -- table: List of cameras
 ```
 
 ## Credits
-[esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera) - Original ESX resource
-[qb-speedcameras](https://github.com/WEEZOOKARP/qb-speedcameras) - Original conversion by WEEZOOKARP
+[esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera) - Original ESX resource  
+[qb-speedcameras](https://github.com/WEEZOOKARP/qb-speedcameras) - Original conversion by WEEZOOKARP  
