@@ -91,7 +91,7 @@ local function handleBilling(playerCar, camera_data, maxSpeed)
 end
 
 ---Sends a police alert if enabled in config
-local function policeAlert()
+local function policeAlert(vehSpeed, maxSpeed, playerCar)
     if not Config.alertPolice and vehSpeed > Config.alertSpeed then return end
 
     local message = Lang:t('alert.caught_speeding', {
@@ -128,7 +128,7 @@ local function monitorSpeed()
         local playerCar = GetVehiclePedIsIn(playerPed, false)
 
         if not IsPedInAnyVehicle(playerPed, false) then return end
-        if not (GetPedInVehicleSeat(playerCar, -1) == playerPed) then sleep = 5000 goto continue end
+        if GetPedInVehicleSeat(playerCar, -1) ~= playerPed then sleep = 5000 goto continue end
 
         for maxSpeed, camera_data in pairs(Config.Cameras) do
             for _, camera_location in pairs(camera_data.locations) do
@@ -140,7 +140,7 @@ local function monitorSpeed()
                 if vehSpeed < maxSpeed then goto continue end
                 if hasBeenCaught then goto continue end
 
-                policeAlert()
+                policeAlert(vehSpeed, maxSpeed, playerCar)
 
                 cameraFlash()
 
