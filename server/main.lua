@@ -1,19 +1,19 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
-RegisterServerEvent('qb-speedcamera:server:PayBill', function(amount)
+RegisterServerEvent('qb-speedcameras:server:PayBill', function(amount)
     local xPlayer = QBCore.Functions.GetPlayer(source)
     xPlayer.Functions.RemoveMoney("bank", amount)
 end)
 
 
-RegisterServerEvent('qb-speedcamera:server:openGUI', function()
+RegisterServerEvent('qb-speedcameras:server:openGUI', function()
     -- TODO: Trigger event on all players in vehicle
-    TriggerClientEvent('qb-speedcamera:clientopenGUI', source)
+    TriggerClientEvent('qb-speedcameras:clientopenGUI', source)
 end)
 
-RegisterServerEvent('qb-speedcamera:server:closeGUI', function()
+RegisterServerEvent('qb-speedcameras:server:closeGUI', function()
     -- TODO: Trigger event on all players in vehicle
-    TriggerClientEvent('qb-speedcamera:client:closeGUI', source)
+    TriggerClientEvent('qb-speedcameras:client:closeGUI', source)
 end)
 
 QBCore.Functions.CreateCallback("qb-speedcameras:server:checkOwnership", function(source, cb, plate)

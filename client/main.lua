@@ -70,7 +70,7 @@ local function billPlayer(camera_data, maxSpeed, units)
         button = {}
         })
     end
-    TriggerServerEvent('qb-speedcamera:server:PayBill', camera_data.fineAmount)
+    TriggerServerEvent('qb-speedcameras:server:PayBill', camera_data.fineAmount)
 end
 
 ---Handles billing logic when player is caught speeding if enabled in config
@@ -107,14 +107,14 @@ end
 ---Displays a flash and camera sound for player when caught if enabled in config
 local function cameraFlash()
     if Config.useFlashingScreen then
-        TriggerServerEvent('qb-speedcamera:server:openGUI')
+        TriggerServerEvent('qb-speedcameras:server:openGUI')
 
         if Config.useCameraSound then
             TriggerServerEvent("InteractSound_SV:PlayOnSource", "speedcamera", 0.5)
         end
 
         Wait(200)
-        TriggerServerEvent('qb-speedcamera:server:closeGUI')
+        TriggerServerEvent('qb-speedcameras:server:closeGUI')
     end
 end
 
@@ -179,12 +179,12 @@ RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     PlayerData.job = JobInfo
 end)
 
-RegisterNetEvent('qb-speedcamera:client:openGUI', function()
+RegisterNetEvent('qb-speedcameras:client:openGUI', function()
     SetNuiFocus(false,false)
     SendNUIMessage({type = 'openSpeedcamera'})
 end)
 
-RegisterNetEvent('qb-speedcamera:client:closeGUI', function()
+RegisterNetEvent('qb-speedcameras:client:closeGUI', function()
     SendNUIMessage({type = 'closeSpeedcamera'})
 end)
 
