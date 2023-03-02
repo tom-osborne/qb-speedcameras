@@ -125,7 +125,6 @@ local function monitorSpeed()
     if isJobExempt() then return end
     while monitoringSpeed do
         sleep = 1000
-        print("looping")
         local playerPed = PlayerPedId()
         local playerCar = GetVehiclePedIsIn(playerPed, false)
 
