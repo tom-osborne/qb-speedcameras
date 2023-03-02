@@ -1,7 +1,7 @@
 QBCore = exports['qb-core']:GetCoreObject()
 
 local PlayerData = {}
-local inVehicle = false
+local monitoringSpeed = false
 local hasBeenCaught = false
 
 local speedCoeff = 3.6
@@ -38,7 +38,7 @@ end
 
 ---Checks whether the player's job is in the Config.ignoredJobs table.
 ---@return boolean
-local function checkJob()
+local function isJobExempt()
     local playerJob = PlayerData.job
     if not playerJob then return false end
     for _, job in pairs(Config.ignoredJobs) do
@@ -96,7 +96,7 @@ local function policeAlert(vehSpeed, maxSpeed, playerCar)
 
     local message = Lang:t('alert.caught_speeding', {
         vehicle_plate = GetVehicleNumberPlateText(playerCar),
-        veh_speed = tostring(vehSpeed),
+        veh_speed = tostring(math.ceil(vehSpeed)),
         max_speed = tostring(maxSpeed),
         speedUnit = speedUnit
     })
@@ -120,10 +120,12 @@ end
 
 ---Main loop to check player speed when in vehicle and detect when caught speeding
 local function monitorSpeed()
-    inVehicle = true
-    local sleep = 0
-    if checkJob() then return end
-    while inVehicle do
+    monitoringSpeed = true
+    local sleep = 1000
+    if isJobExempt() then return end
+    while monitoringSpeed do
+        sleep = 1000
+        print("looping")
         local playerPed = PlayerPedId()
         local playerCar = GetVehiclePedIsIn(playerPed, false)
 
@@ -139,6 +141,7 @@ local function monitorSpeed()
                 if dist > 20.0 then goto next end
                 if vehSpeed < maxSpeed then goto continue end
                 if hasBeenCaught then goto continue end
+                sleep = 100
 
                 policeAlert(vehSpeed, maxSpeed, playerCar)
 
@@ -147,16 +150,14 @@ local function monitorSpeed()
                 handleBilling(playerCar, camera_data, maxSpeed)
 
                 hasBeenCaught = true
-
+                Wait(5000)
                 -- API calls
                 TriggerEvent("qb-speedcameras:client:caught", playerCar, camera_location)
                 TriggerServerEvent("qb-speedcameras:server:caught", NetworkGetNetworkIdFromEntity(playerCar), camera_location)
 
-                Wait(5000)
                 ::next::
             end
             hasBeenCaught = false
-            Wait(5000)
         end
         ::continue::
         Wait(sleep)
@@ -177,6 +178,11 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     PlayerData.job = JobInfo
+    if isJobExempt() then
+        monitoringSpeed = false
+    else
+        monitorSpeed()
+    end
 end)
 
 RegisterNetEvent('qb-speedcameras:client:openGUI', function()
@@ -193,5 +199,5 @@ RegisterNetEvent("QBCore:Client:EnteredVehicle", function()
 end)
 
 RegisterNetEvent("QBCore:Client:LeftVehicle", function()
-    inVehicle = false
+    monitoringSpeed = false
 end)

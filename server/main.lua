@@ -8,7 +8,7 @@ end)
 
 RegisterServerEvent('qb-speedcameras:server:openGUI', function()
     -- TODO: Trigger event on all players in vehicle
-    TriggerClientEvent('qb-speedcameras:clientopenGUI', source)
+    TriggerClientEvent('qb-speedcameras:client:openGUI', source)
 end)
 
 RegisterServerEvent('qb-speedcameras:server:closeGUI', function()

@@ -1,8 +1,8 @@
 Config = {}
 
 Config.MPH = true                 -- bool: false for KMH / true for MPH
-Config.useCameraSound = true      -- bool: Makes a camera shutter sound effect
 Config.useFlashingScreen = true   -- bool: Flashes screen white for a brief moment
+Config.useCameraSound = true      -- bool: Makes a camera shutter sound effect
 Config.useBlips = true            -- bool: Turns blips on/off
 Config.alertPolice = true         -- bool: Whether to alert police above certain speed
 Config.alertSpeed = 130           -- number: Alerts police when caught above this speed
