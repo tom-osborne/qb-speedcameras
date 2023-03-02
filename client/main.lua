@@ -121,7 +121,7 @@ end
 ---Main loop to check player speed when in vehicle and detect when caught speeding
 local function monitorSpeed()
     monitoringSpeed = true
-    local sleep = 1000
+    local sleep
     if isJobExempt() then return end
     while monitoringSpeed do
         sleep = 1000
