@@ -38,6 +38,30 @@ Config.ignoredJobs = {}            -- table: Table of jobs that wll not get fine
 Config.Cameras = {}               -- table: List of cameras
 ```
 
+# Developers
+Developers can use the following events to handle any extended functionality. These can be added to any resource.
+
+## Client Events
+```lua
+RegisterNetEvent("qb-speedcameras:client:caught", function(playerCar, camera_location)
+    -- Event handler code
+end)
+```
+Triggered upon player being caught  
+- `playerCar` [**number**] The vehicle the player was in at the time of being caught.
+- `camera_location` [**vec3**] The camera location that caught the player.
+
+
+## Server Events
+```lua
+RegisterNetEvent("qb-speedcameras:server:caught", function(source, netID, camera_location)
+    -- Event handler code
+end)
+```
+Triggered upon player being caught
+- `source` [**number**] The source of the event trigger (player ID)
+- `netID` [**number**] The network ID of the vehicle the player was in at the time of being caught.
+- `camera_location` [**vec3**] The camera location that caught the player.
+
 ## Credits
-[esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera) - Original ESX resource  
-[qb-speedcameras](https://github.com/WEEZOOKARP/qb-speedcameras) - Original conversion by WEEZOOKARP  
+[esx_speedcamera](https://github.com/P4NDAzzGaming/esx_speedcamera) - Original resource

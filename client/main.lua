@@ -1,6 +1,7 @@
 QBCore = exports['qb-core']:GetCoreObject()
 
 local PlayerData = {}
+local monitoringSpeed = false
 local hasBeenCaught = false
 
 local speedCoeff = 3.6
@@ -11,10 +12,12 @@ if Config.MPH then
     speedUnit = " MPH"
 end
 
+---Dummy function for users to modify when they dont want to use the standard billing function provided
 local function nonbilling()
     -- Insert code here to execute when player is caught by speedcamera and you don't want to fine them
 end
 
+---Creates map blips for speed camera locations. Requires config.useBlips to be enabled.
 local function createBlips()
     if not Config.useBlips then return end
     for camera_speed, camera_data in pairs(Config.Cameras) do
@@ -33,18 +36,21 @@ local function createBlips()
     end
 end
 
-local function checkJob()
-  local playerJob = PlayerData.job
-  if playerJob then
+---Checks whether the player's job is in the Config.ignoredJobs table.
+---@return boolean
+local function isJobExempt()
+    local playerJob = PlayerData.job
+    if not playerJob then return false end
     for _, job in pairs(Config.ignoredJobs) do
-      if playerJob.name == job and playerJob.onduty then
-        return true
-      end
+        if playerJob.name == job and playerJob.onduty then return true end
     end
-  end
-  return false
+    return false
 end
 
+---Sends a bill to the client for the configured amount.
+---@param camera_data table
+---@param maxSpeed number
+---@param units string
 local function billPlayer(camera_data, maxSpeed, units)
     local msg = Lang:t('info.mail_msg', {
         fineAmount = tostring(camera_data.fineAmount),
@@ -64,11 +70,98 @@ local function billPlayer(camera_data, maxSpeed, units)
         button = {}
         })
     end
-    TriggerServerEvent('qb-speedcamera:PayBill', camera_data.fineAmount)
+    TriggerServerEvent('qb-speedcameras:server:PayBill', camera_data.fineAmount)
 end
 
-local function OnPoliceAlert(message)
+---Handles billing logic when player is caught speeding if enabled in config
+---@param playerCar number
+---@param camera_data table
+---@param maxSpeed number
+local function handleBilling(playerCar, camera_data, maxSpeed)
+    if not Config.useBilling then nonbilling() return end
+    if not Config.OnlyBillIfOwned then billPlayer(camera_data, maxSpeed, speedUnit) return end
+
+    local plate = QBCore.Functions.GetPlate(playerCar)
+    QBCore.Functions.TriggerCallback("qb-speedcameras:server:checkOwnership", function(result)
+        if result then
+            billPlayer(camera_data, maxSpeed, speedUnit)
+        end
+    end, plate)
+
+end
+
+---Sends a police alert if enabled in config
+local function policeAlert(vehSpeed, maxSpeed, playerCar)
+    if not Config.alertPolice and vehSpeed > Config.alertSpeed then return end
+
+    local message = Lang:t('alert.caught_speeding', {
+        vehicle_plate = GetVehicleNumberPlateText(playerCar),
+        veh_speed = tostring(math.ceil(vehSpeed)),
+        max_speed = tostring(maxSpeed),
+        speedUnit = speedUnit
+    })
+
     TriggerServerEvent("police:server:policeAlert", message)
+end
+
+---Displays a flash and camera sound for player when caught if enabled in config
+local function cameraFlash()
+    if Config.useFlashingScreen then
+        TriggerServerEvent('qb-speedcameras:server:openGUI')
+
+        if Config.useCameraSound then
+            TriggerServerEvent("InteractSound_SV:PlayOnSource", "speedcamera", 0.5)
+        end
+
+        Wait(200)
+        TriggerServerEvent('qb-speedcameras:server:closeGUI')
+    end
+end
+
+---Main loop to check player speed when in vehicle and detect when caught speeding
+local function monitorSpeed()
+    monitoringSpeed = true
+    local sleep
+    if isJobExempt() then return end
+    while monitoringSpeed do
+        sleep = 1000
+        print("looping")
+        local playerPed = PlayerPedId()
+        local playerCar = GetVehiclePedIsIn(playerPed, false)
+
+        if not IsPedInAnyVehicle(playerPed, false) then return end
+        if GetPedInVehicleSeat(playerCar, -1) ~= playerPed then sleep = 5000 goto continue end
+
+        for maxSpeed, camera_data in pairs(Config.Cameras) do
+            for _, camera_location in pairs(camera_data.locations) do
+                local plyCoords = GetEntityCoords(playerPed, false)
+                local dist = #(plyCoords - camera_location)
+                local vehSpeed = GetEntitySpeed(playerPed) * speedCoeff
+
+                if dist > 100.0 then goto next end
+                if vehSpeed < maxSpeed then goto continue end
+                if hasBeenCaught then goto continue end
+                sleep = 100
+
+                policeAlert(vehSpeed, maxSpeed, playerCar)
+
+                cameraFlash()
+
+                handleBilling(playerCar, camera_data, maxSpeed)
+
+                hasBeenCaught = true
+                Wait(5000)
+                -- API calls
+                TriggerEvent("qb-speedcameras:client:caught", playerCar, camera_location)
+                TriggerServerEvent("qb-speedcameras:server:caught", NetworkGetNetworkIdFromEntity(playerCar), camera_location)
+
+                ::next::
+            end
+            hasBeenCaught = false
+        end
+        ::continue::
+        Wait(sleep)
+    end
 end
 
 RegisterNetEvent('onResourceStart', function(resourceName)
@@ -85,75 +178,26 @@ end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     PlayerData.job = JobInfo
+    if isJobExempt() then
+        monitoringSpeed = false
+    else
+        monitorSpeed()
+    end
 end)
 
-RegisterNetEvent('qb-speedcamera:openGUI', function()
+RegisterNetEvent('qb-speedcameras:client:openGUI', function()
     SetNuiFocus(false,false)
     SendNUIMessage({type = 'openSpeedcamera'})
 end)
 
-RegisterNetEvent('qb-speedcamera:closeGUI', function()
+RegisterNetEvent('qb-speedcameras:client:closeGUI', function()
     SendNUIMessage({type = 'closeSpeedcamera'})
 end)
 
-CreateThread(function()
-    while true do
-        Wait(0)
-        local playerPed = PlayerPedId()
-        local playerCar = GetVehiclePedIsIn(playerPed, false)
+RegisterNetEvent("QBCore:Client:EnteredVehicle", function()
+    monitorSpeed()
+end)
 
-        for maxSpeed, camera_data in pairs(Config.Cameras) do
-            for _, camera_location in pairs(camera_data.locations) do
-                local plyCoords = GetEntityCoords(playerPed, false)
-                local dist = #(plyCoords - camera_location)
-                local vehSpeed = GetEntitySpeed(playerPed) * speedCoeff
-
-                if dist <= 20.0 and vehSpeed > maxSpeed and IsPedInAnyVehicle(playerPed, false) and (GetPedInVehicleSeat(playerCar, -1) == playerPed) and hasBeenCaught == false then
-                    if not checkJob() then
-
-                        -- ALERT POLICE (START)
-                        if Config.alertPolice and vehSpeed > Config.alertSpeed then
-                            OnPoliceAlert(Lang:t('alert.caught_speeding', {
-                                vehicle_plate = GetVehicleNumberPlateText(playerCar),
-                                veh_speed = tostring(vehSpeed),
-                                max_speed = tostring(maxSpeed),
-                                speedUnit = speedUnit
-                                })
-                            )
-                        end
-
-                        if Config.useFlashingScreen then
-                            TriggerServerEvent('qb-speedcamera:openGUI')
-
-                            if Config.useCameraSound then
-                                TriggerServerEvent("InteractSound_SV:PlayOnSource", "speedcamera", 0.5)
-                            end
-
-                            Wait(200)
-                            TriggerServerEvent('qb-speedcamera:closeGUI')
-                        end
-
-                        if Config.useBilling then
-                            if Config.OnlyBillIfOwned then
-                                local plate = QBCore.Functions.GetPlate(playerCar)
-                                QBCore.Functions.TriggerCallback("qb-speedcameras:server:checkOwnership", function(result)
-                                    if result then
-                                        billPlayer(camera_data, maxSpeed, speedUnit)
-                                    end
-                                end, plate)
-                            else
-                                billPlayer(camera_data, maxSpeed, speedUnit)
-                            end
-                        else
-                            nonbilling()
-                        end
-                        hasBeenCaught = true
-                        Wait(5000)
-                    end
-                    hasBeenCaught = false
-                    Wait(5000)
-                end
-            end
-        end
-    end
+RegisterNetEvent("QBCore:Client:LeftVehicle", function()
+    monitoringSpeed = false
 end)
