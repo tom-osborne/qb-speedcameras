@@ -138,7 +138,7 @@ local function monitorSpeed()
                 local dist = #(plyCoords - camera_location)
                 local vehSpeed = GetEntitySpeed(playerPed) * speedCoeff
 
-                if dist > 20.0 then goto next end
+                if dist > 100.0 then goto next end
                 if vehSpeed < maxSpeed then goto continue end
                 if hasBeenCaught then goto continue end
                 sleep = 100
