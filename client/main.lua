@@ -120,47 +120,49 @@ end
 
 ---Main loop to check player speed when in vehicle and detect when caught speeding
 local function monitorSpeed()
-    monitoringSpeed = true
-    local sleep
-    if isJobExempt() then return end
-    while monitoringSpeed do
-        sleep = 1000
-        local playerPed = PlayerPedId()
-        local playerCar = GetVehiclePedIsIn(playerPed, false)
+    CreateThread(function()
+        monitoringSpeed = true
+        local sleep
+        if isJobExempt() then return end
+        while monitoringSpeed do
+            sleep = 1000
+            local playerPed = PlayerPedId()
+            local playerCar = GetVehiclePedIsIn(playerPed, false)
 
-        if not IsPedInAnyVehicle(playerPed, false) then return end
-        if GetPedInVehicleSeat(playerCar, -1) ~= playerPed then sleep = 5000 goto continue end
+            if not IsPedInAnyVehicle(playerPed, false) then return end
+            if GetPedInVehicleSeat(playerCar, -1) ~= playerPed then sleep = 5000 goto continue end
 
-        for maxSpeed, camera_data in pairs(Config.Cameras) do
-            for _, camera_location in pairs(camera_data.locations) do
-                local plyCoords = GetEntityCoords(playerPed, false)
-                local dist = #(plyCoords - camera_location)
-                local vehSpeed = GetEntitySpeed(playerPed) * speedCoeff
+            for maxSpeed, camera_data in pairs(Config.Cameras) do
+                for _, camera_location in pairs(camera_data.locations) do
+                    local plyCoords = GetEntityCoords(playerPed, false)
+                    local dist = #(plyCoords - camera_location)
+                    local vehSpeed = GetEntitySpeed(playerPed) * speedCoeff
 
-                if dist > 100.0 then goto next end
-                if vehSpeed < maxSpeed then goto continue end
-                if hasBeenCaught then goto continue end
-                sleep = 100
+                    if dist > 100.0 then goto next end
+                    if vehSpeed < maxSpeed then goto continue end
+                    if hasBeenCaught then goto continue end
+                    sleep = 100
 
-                policeAlert(vehSpeed, maxSpeed, playerCar)
+                    policeAlert(vehSpeed, maxSpeed, playerCar)
 
-                cameraFlash()
+                    cameraFlash()
 
-                handleBilling(playerCar, camera_data, maxSpeed)
+                    handleBilling(playerCar, camera_data, maxSpeed)
 
-                hasBeenCaught = true
-                Wait(5000)
-                -- API calls
-                TriggerEvent("qb-speedcameras:client:caught", playerCar, camera_location)
-                TriggerServerEvent("qb-speedcameras:server:caught", NetworkGetNetworkIdFromEntity(playerCar), camera_location)
+                    hasBeenCaught = true
+                    Wait(5000)
+                    -- API calls
+                    TriggerEvent("qb-speedcameras:client:caught", playerCar, camera_location)
+                    TriggerServerEvent("qb-speedcameras:server:caught", NetworkGetNetworkIdFromEntity(playerCar), camera_location)
 
-                ::next::
+                    ::next::
+                end
+                hasBeenCaught = false
             end
-            hasBeenCaught = false
+            ::continue::
+            Wait(sleep)
         end
-        ::continue::
-        Wait(sleep)
-    end
+    end)
 end
 
 RegisterNetEvent('onResourceStart', function(resourceName)
